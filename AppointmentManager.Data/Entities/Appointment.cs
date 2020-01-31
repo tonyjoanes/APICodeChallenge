@@ -10,5 +10,7 @@ namespace AppointmentManager.Data.Entities
         public DateTimeOffset Date { get; set; }
         public string PatientId { get; set; }
         public int EquipmentId { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

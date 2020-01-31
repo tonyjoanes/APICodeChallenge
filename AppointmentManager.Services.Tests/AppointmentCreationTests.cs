@@ -10,7 +10,7 @@ namespace AppointmentManager.Services.Tests
 {
     public class AppointmentCreationTests
     {
-        private AppointmentService sut;
+        private IAppointmentService sut;
         private Mock<IDateTime> mockDate = new Mock<IDateTime>();
         private Mock<IEquipmentService> mockEquipmentService = new Mock<IEquipmentService>();
         private Mock<IAppointmentRepository> mockAppointmentRepository = new Mock<IAppointmentRepository>();
@@ -86,6 +86,7 @@ namespace AppointmentManager.Services.Tests
 
             mockDate.Setup(x => x.Now)
                     .Returns(new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero));
+
             mockEquipmentService.Setup(x => x.GetAvailableEquipment(appointmentDate))
                                 .Returns(availableEquipment);
 

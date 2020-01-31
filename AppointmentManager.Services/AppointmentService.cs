@@ -54,5 +54,20 @@ namespace AppointmentManager.Services
                 throw new Exception($"There was an issue creating the appointment: {ex.Message}");
             }
         }
+
+        public void Cancel(string patientId, DateTimeOffset appointmentDate)
+        {
+            var appointment = appointmentRepository.GetAppointment(patientId, appointmentDate);
+
+            if (appointment == null)
+            {
+                throw new ValidationException("No appointment was found to cancel");
+            }
+
+            if ((appointmentDate - dateTime.Now).Days < 3)
+            {
+                throw new ValidationException("Cannot cancel appointment when its less than 3 days due");
+            }
+        }
     }
 }
