@@ -31,7 +31,7 @@ namespace AppointmentManager.API.Controllers
         {
             try
             {
-                var signInResult = await signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+                var signInResult = await signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: false, lockoutOnFailure: false);
 
                 if (signInResult.Succeeded)
                 {

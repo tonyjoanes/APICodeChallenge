@@ -39,7 +39,8 @@ namespace AppointmentManager.Data
                     UserName = "testpatient",
                     FirstName = "Test",
                     LastName = "Patient",
-                    Email = "testpatient@test.com"
+                    Email = "testpatient@test.com",
+                    PatientId = "ABC123456789"
                 };
 
                 var userResult = await userManager.CreateAsync(user, "P@ssw0rd!");

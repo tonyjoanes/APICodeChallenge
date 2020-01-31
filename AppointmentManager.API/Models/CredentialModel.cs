@@ -5,8 +5,7 @@ namespace AppointmentManager.API.Models
     public class CredentialModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string UserName { get; set; }
         
         [Required]
         [DataType(DataType.Password)]

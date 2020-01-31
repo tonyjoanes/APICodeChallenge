@@ -5,6 +5,13 @@ namespace AppointmentManager.API.Extentsions
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Configure the Application Cookie
+        /// 
+        /// If we don't do this then API requests that are not authorised will be
+        /// routed to the login page by default but we want to return a 401
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureApplicationCooke(this IServiceCollection services)
         {
             services.ConfigureApplicationCookie(options =>

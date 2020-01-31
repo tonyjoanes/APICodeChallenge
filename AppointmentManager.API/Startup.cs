@@ -1,6 +1,9 @@
 using AppointmentManager.API.Extentsions;
+using AppointmentManager.Common;
 using AppointmentManager.Data;
 using AppointmentManager.Data.Entities;
+using AppointmentManager.Data.Repositories;
+using AppointmentManager.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -28,11 +31,17 @@ namespace AppointmentManager.API
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddScoped<IDateTime, DateTimeWrapper>();
             services.AddDbContext<AppDbContext>(ServiceLifetime.Scoped);
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             services.AddTransient<IdentityInitializer>();
-            services.ConfigureApplicationCooke();
 
+            // stubbing this out so using singleton
+            services.AddSingleton<IEquipmentService, InMemoryEquipmentService>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
+            services.ConfigureApplicationCooke();
             services.AddControllers();
         }
 
@@ -48,6 +57,7 @@ namespace AppointmentManager.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

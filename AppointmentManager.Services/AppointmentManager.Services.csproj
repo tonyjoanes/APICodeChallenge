@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AppointmentManager.Common\AppointmentManager.Common.csproj" />
+    <ProjectReference Include="..\AppointmentManager.Data\AppointmentManager.Data.csproj" />
+  </ItemGroup>
+
+</Project>
