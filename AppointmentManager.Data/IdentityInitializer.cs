@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace AppointmentManager.Data
 {
+    /// <summary>
+    /// Identity User
+    /// 
+    /// Initialise the db with a default user with a patient role
+    /// </summary>
     public class IdentityInitializer
     {
         private readonly UserManager<User> userManager;

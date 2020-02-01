@@ -8,20 +8,8 @@ using Xunit;
 
 namespace AppointmentManager.Services.Tests
 {
-    public class AppointmentCreationTests
+    public class AppointmentCreationTests : BaseTestClass
     {
-        private IAppointmentService sut;
-        private Mock<IDateTime> mockDate = new Mock<IDateTime>();
-        private Mock<IEquipmentService> mockEquipmentService = new Mock<IEquipmentService>();
-        private Mock<IAppointmentRepository> mockAppointmentRepository = new Mock<IAppointmentRepository>();
-
-        public AppointmentCreationTests()
-        {
-            sut = new AppointmentService(mockEquipmentService.Object, 
-                                         mockAppointmentRepository.Object, 
-                                         mockDate.Object);
-        }
-
         [Fact]
         public void UsingSub2WeekDate_ShouldNotThrowValidationException()
         {
@@ -82,7 +70,7 @@ namespace AppointmentManager.Services.Tests
         public void WhenAppointmentAlreadyExistsOnDateProvided_ShouldThrowValidationError()
         {
             var appointmentDate = new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero);
-            var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = Status.Available };
+            var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = EquipmentStatus.Available };
 
             mockDate.Setup(x => x.Now)
                     .Returns(new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero));
@@ -100,7 +88,7 @@ namespace AppointmentManager.Services.Tests
         public void WhenEquipmentAvailable_ShouldCreateApppointment()
         {
             var appointmentDate = new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero);
-            var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = Status.Available };
+            var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = EquipmentStatus.Available };
             var patientId = "3523525";
 
             mockDate.Setup(x => x.Now)
@@ -118,7 +106,7 @@ namespace AppointmentManager.Services.Tests
         public void WhenAppointmentIsCreated_ShouldSetEquipmentStatus()
         {
             var appointmentDate = new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero);
-            var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = Status.Available };
+            var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = EquipmentStatus.Available };
             var patientId = "3523525";
 
             mockDate.Setup(x => x.Now)
@@ -127,11 +115,11 @@ namespace AppointmentManager.Services.Tests
             mockEquipmentService.Setup(x => x.GetAvailableEquipment(appointmentDate))
                                 .Returns(availableEquipment);
 
-            mockEquipmentService.Setup(x => x.SetEquipmentUnavailable(availableEquipment));
+            mockEquipmentService.Setup(x => x.SetEquipmentUnavailable(appointmentDate));
 
             sut.Create(patientId, appointmentDate);
 
-            mockEquipmentService.Verify(x => x.SetEquipmentUnavailable(availableEquipment), Times.Once);
+            mockEquipmentService.Verify(x => x.SetEquipmentUnavailable(appointmentDate), Times.Once);
         }
     }
 }

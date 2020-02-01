@@ -1,6 +1,9 @@
 ﻿namespace AppointmentManager.Data.Entities
 {
-    public enum Status
+    /// <summary>
+    /// Equipment Status
+    /// </summary>
+    public enum EquipmentStatus
     {
         Available,
         Unavailable

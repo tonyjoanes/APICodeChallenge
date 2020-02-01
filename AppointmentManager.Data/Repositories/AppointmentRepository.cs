@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace AppointmentManager.Data.Repositories
 {
+    /// <summary>
+    /// Appointment Repository
+    /// </summary>
     public class AppointmentRepository : IAppointmentRepository
     {
         private readonly AppDbContext dbContext;
@@ -18,6 +21,11 @@ namespace AppointmentManager.Data.Repositories
             this.dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Appointment Exists
+        /// </summary>
+        /// <param name="appointmentDate"></param>
+        /// <returns></returns>
         public bool AppointmentExists(DateTimeOffset appointmentDate)
         {
             var appointment = dbContext
@@ -30,6 +38,12 @@ namespace AppointmentManager.Data.Repositories
                 : true;
         }
 
+        /// <summary>
+        /// Gets an Appointment by PatientId and Appointment Date
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <param name="appointmentDate"></param>
+        /// <returns></returns>
         public Appointment GetAppointment(string patientId, DateTimeOffset appointmentDate)
         {
             return dbContext
@@ -39,6 +53,12 @@ namespace AppointmentManager.Data.Repositories
                     && !x.IsDeleted);
         }
 
+        /// <summary>
+        /// Create an Appointment
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <param name="equipment"></param>
+        /// <param name="appointmentDate"></param>
         public void CreateAppointment(string patientId, Equipment equipment, DateTimeOffset appointmentDate)
         {
             var newAppointment = new Appointment
@@ -50,6 +70,15 @@ namespace AppointmentManager.Data.Repositories
             };
 
             dbContext.Appointments.Add(newAppointment);
+        }
+
+        /// <summary>
+        /// Cancel an Appointment
+        /// </summary>
+        /// <param name="appointment"></param>
+        public void CancelAppointment(Appointment appointment)
+        {
+            appointment.IsDeleted = true;
         }
     }
 }

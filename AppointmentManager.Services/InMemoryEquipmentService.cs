@@ -1,12 +1,25 @@
 ﻿using AppointmentManager.Data.Entities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AppointmentManager.Services
 {
+    /// <summary>
+    /// In memory version of the Equipment Service
+    /// </summary>
     public class InMemoryEquipmentService : IEquipmentService
     {
         private Equipment equipment;
 
+        // In real world we'd persist equipment bookings so we
+        // had an audit trail and additional details but for this
+        // stubbed service this will do just nicely
+        private List<DateTime> equipmentBookings;
+
+        /// <summary>
+        /// Initialise an instance of the InMemoryEquipmentService
+        /// </summary>
         public InMemoryEquipmentService()
         {
             // there is only one piece of equipment deployed
@@ -15,26 +28,38 @@ namespace AppointmentManager.Services
             {
                 Id = 1,
                 Name = "MEDICAL_DEVICE_100",
-                Status = Status.Available
+                Status = EquipmentStatus.Available
             };
+
+            equipmentBookings = new List<DateTime>();
         }
+
+        /// <summary>
+        /// Get Available Equipment
+        /// </summary>
+        /// <param name="appointmentDate"></param>
+        /// <returns></returns>
         public Equipment GetAvailableEquipment(DateTimeOffset appointmentDate)
         {
-            // todo: Should check equipment isn't being used in an
-            // existing appointment
-            return equipment.Status == Status.Available
+            return equipmentBookings.IndexOf(appointmentDate.Date) == -1
                 ? equipment
                 : null;
         }
 
-        public void SetEquipmentAvailable(Equipment equipment)
+        public void SetEquipmentAvailable(DateTimeOffset appointmentDate)
         {
-            equipment.Status = Status.Available;
+            var removeBooking = equipmentBookings.Single(x => x == appointmentDate.Date);
+            equipmentBookings.Remove(removeBooking);
         }
 
-        public void SetEquipmentUnavailable(Equipment equipment)
+        public void SetEquipmentAvailable(int id)
         {
-            equipment.Status = Status.Unavailable;
+            equipment.Status = EquipmentStatus.Available;
+        }
+
+        public void SetEquipmentUnavailable(DateTimeOffset appointmentDate)
+        {
+            equipmentBookings.Add(appointmentDate.Date);
         }
     }
 }

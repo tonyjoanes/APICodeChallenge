@@ -3,10 +3,13 @@ using System;
 
 namespace AppointmentManager.Services
 {
+    /// <summary>
+    /// Equipment Service Interface
+    /// </summary>
     public interface IEquipmentService
     {
         Equipment GetAvailableEquipment(DateTimeOffset appointmentDate);
-        void SetEquipmentUnavailable(Equipment equipment);
-        void SetEquipmentAvailable(Equipment equipment);
+        void SetEquipmentUnavailable(DateTimeOffset appointmentDate);
+        void SetEquipmentAvailable(DateTimeOffset appointmentDate);
     }
 }

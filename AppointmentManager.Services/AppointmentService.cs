@@ -5,21 +5,37 @@ using System;
 
 namespace AppointmentManager.Services
 {
+    /// <summary>
+    /// AppointmentService
+    /// 
+    /// Handles the management of Appointment Actions
+    /// </summary>
     public class AppointmentService : IAppointmentService
     {
         private readonly IEquipmentService equipmentService;
         private readonly IAppointmentRepository appointmentRepository;
         private readonly IDateTime dateTime;
 
+        /// <summary>
+        /// Initialises an instance of the AppointmentService
+        /// </summary>
+        /// <param name="equipmentService"></param>
+        /// <param name="appointmentRepository"></param>
+        /// <param name="dateTime"></param>
         public AppointmentService(IEquipmentService equipmentService,
-                                  IAppointmentRepository AppointmentRepository,
+                                  IAppointmentRepository appointmentRepository,
                                   IDateTime dateTime)
         {
             this.equipmentService = equipmentService;
-            appointmentRepository = AppointmentRepository;
+            this.appointmentRepository = appointmentRepository;
             this.dateTime = dateTime;
         }
 
+        /// <summary>
+        /// Create a new Appointment for a patient
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <param name="appointmentDate"></param>
         public void Create(string patientId, DateTimeOffset appointmentDate)
         {
             if (appointmentDate < dateTime.Now)
@@ -47,7 +63,7 @@ namespace AppointmentManager.Services
             try
             {
                 appointmentRepository.CreateAppointment(patientId, availableEquipment, appointmentDate);
-                equipmentService.SetEquipmentUnavailable(availableEquipment);
+                equipmentService.SetEquipmentUnavailable(appointmentDate);
             }
             catch (Exception ex)
             {
@@ -55,6 +71,11 @@ namespace AppointmentManager.Services
             }
         }
 
+        /// <summary>
+        /// Cancels an Appointment for a patient
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <param name="appointmentDate"></param>
         public void Cancel(string patientId, DateTimeOffset appointmentDate)
         {
             var appointment = appointmentRepository.GetAppointment(patientId, appointmentDate);
@@ -67,6 +88,16 @@ namespace AppointmentManager.Services
             if ((appointmentDate - dateTime.Now).Days < 3)
             {
                 throw new ValidationException("Cannot cancel appointment when its less than 3 days due");
+            }
+
+            try
+            {
+                appointmentRepository.CancelAppointment(appointment);
+                equipmentService.SetEquipmentAvailable(appointmentDate);
+            }
+            catch (Exception)
+            {
+                throw new Exception("There was an issue cancelling the appointment");
             }
         }
     }
