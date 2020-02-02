@@ -14,7 +14,7 @@ Run the tests
 
 `dotnet test`
 
-Using package manager update the database
+Using package manager update the database from the `AppointmentManager.Data` project context
 
 `Update-Database`
 
