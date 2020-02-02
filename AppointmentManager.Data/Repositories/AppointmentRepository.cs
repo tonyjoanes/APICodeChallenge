@@ -26,11 +26,12 @@ namespace AppointmentManager.Data.Repositories
         /// </summary>
         /// <param name="appointmentDate"></param>
         /// <returns></returns>
-        public bool AppointmentExists(DateTimeOffset appointmentDate)
+        public bool AppointmentExists(string patientId, DateTimeOffset appointmentDate)
         {
             var appointment = dbContext
                 .Appointments
                 .FirstOrDefault(x => x.Date.Date == appointmentDate.Date 
+                    && x.PatientId == patientId
                     && !x.IsDeleted);
 
             return appointment == null

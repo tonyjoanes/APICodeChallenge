@@ -24,9 +24,10 @@ namespace AppointmentManager.Data.Repositories
         /// <summary>
         /// Appointment Exists
         /// </summary>
+        /// <param name="patientId"></param>
         /// <param name="appointmentDate"></param>
         /// <returns></returns>
-        bool AppointmentExists(DateTimeOffset appointmentDate);
+        bool AppointmentExists(string PatientId, DateTimeOffset appointmentDate);
 
         /// <summary>
         /// Gets an Appointment by PatientId and Appointment Date

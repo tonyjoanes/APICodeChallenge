@@ -1,11 +1,7 @@
-﻿using AppointmentManager.Common;
-using AppointmentManager.Common.Validation;
+﻿using AppointmentManager.Common.Validation;
 using AppointmentManager.Data.Entities;
-using AppointmentManager.Data.Repositories;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace AppointmentManager.Services.Tests
@@ -15,7 +11,6 @@ namespace AppointmentManager.Services.Tests
         [Fact]
         public void WhenAppointmentDoesNotExist_ShouldThrowValidationException()
         {
-            var patientId = "332646";
             var appointmentDate = new DateTimeOffset(2020, 1, 1, 10, 00, 00, TimeSpan.Zero);
 
             mockAppointmentRepository.Setup(x => x.GetAppointment(patientId, appointmentDate)).Returns((Appointment)null);
@@ -28,7 +23,6 @@ namespace AppointmentManager.Services.Tests
         [InlineData(21, 20)]
         public void WhenCancellationDateIsLessThan3DaysBeforeAppointmentDate_ShouldThrowValidationException(int appointmentDateDay, int currentDateDay)
         {
-            var patientId = "332646";
             var appointmentDate = new DateTimeOffset(2020, 2, appointmentDateDay, 10, 10, 00, 00, TimeSpan.Zero);
 
             mockDate.Setup(x => x.Now)
@@ -43,7 +37,6 @@ namespace AppointmentManager.Services.Tests
         [Fact]
         public void WhenAppointmentValid_ShouldCallDeleteOnAppointment()
         {
-            var patientId = "332646";
             var appointmentDate = new DateTimeOffset(2020, 2, 10, 10, 00, 00, TimeSpan.Zero);
             var appointment = new Appointment
             {
@@ -65,7 +58,6 @@ namespace AppointmentManager.Services.Tests
         [Fact]
         public void WhenCancellingAppointmentAndErrorOccurs_ShouldThrowAnError()
         {
-            var patientId = "332646";
             var appointmentDate = new DateTimeOffset(2020, 2, 10, 10, 00, 00, TimeSpan.Zero);
             var appointment = new Appointment
             {
@@ -86,7 +78,6 @@ namespace AppointmentManager.Services.Tests
         [Fact]
         public void WhenAppointmentValid_ShouldSetEquipmentAvailable()
         {
-            var patientId = "332646";
             var appointmentDate = new DateTimeOffset(2020, 2, 10, 10, 00, 00, TimeSpan.Zero);
             var appointment = new Appointment
             {

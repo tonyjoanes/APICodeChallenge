@@ -20,7 +20,7 @@ namespace AppointmentManager.Services.Tests
             mockEquipmentService.Setup(x => x.GetAvailableEquipment(appointmentDate))
                                 .Returns(new Equipment { Id = 1, Name = "Device-1" });
 
-            var exception = Record.Exception(() => sut.Create("patient1", appointmentDate));
+            var exception = Record.Exception(() => sut.Create(patientId, appointmentDate));
             Assert.Null(exception);
         }
 
@@ -34,7 +34,7 @@ namespace AppointmentManager.Services.Tests
             mockDate.Setup(x => x.Now)
                     .Returns(appointmentDate.AddDays(-daysSubAppointmentDate));         
 
-            var exception = Assert.Throws<ValidationException>(() => sut.Create("patient1", appointmentDate));
+            var exception = Assert.Throws<ValidationException>(() => sut.Create(patientId, appointmentDate));
             Assert.NotNull(exception);
             Assert.Equal("Appointment date must not be later than two weeks from now", exception.Message);
         }
@@ -46,7 +46,7 @@ namespace AppointmentManager.Services.Tests
             mockDate.Setup(x => x.Now)
                     .Returns(new DateTimeOffset(2020, 1, 2, 10, 00, 00, TimeSpan.Zero));
 
-            var exception = Assert.Throws<ValidationException>(() => sut.Create("patient1", appointmentDate));
+            var exception = Assert.Throws<ValidationException>(() => sut.Create(patientId, appointmentDate));
             Assert.NotNull(exception);
             Assert.Equal("Appointment date cannot be in the past", exception.Message);
         }
@@ -62,7 +62,7 @@ namespace AppointmentManager.Services.Tests
             mockEquipmentService.Setup(x => x.GetAvailableEquipment(appointmentDate))
                                 .Returns((Equipment)null);
 
-            var exception = Assert.Throws<ValidationException>(() => sut.Create("35152", appointmentDate));
+            var exception = Assert.Throws<ValidationException>(() => sut.Create(patientId, appointmentDate));
             Assert.NotNull(exception);
         }
 
@@ -78,9 +78,9 @@ namespace AppointmentManager.Services.Tests
             mockEquipmentService.Setup(x => x.GetAvailableEquipment(appointmentDate))
                                 .Returns(availableEquipment);
 
-            mockAppointmentRepository.Setup(x => x.AppointmentExists(appointmentDate)).Returns(true);
+            mockAppointmentRepository.Setup(x => x.AppointmentExists(patientId, appointmentDate)).Returns(true);
 
-            var exception = Assert.Throws<ValidationException>(() => sut.Create("tdfbfdb", appointmentDate));
+            var exception = Assert.Throws<ValidationException>(() => sut.Create(patientId, appointmentDate));
             Assert.Equal("An appointment already exists for this date", exception.Message);
         }
 
@@ -89,7 +89,6 @@ namespace AppointmentManager.Services.Tests
         {
             var appointmentDate = new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero);
             var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = EquipmentStatus.Available };
-            var patientId = "3523525";
 
             mockDate.Setup(x => x.Now)
                     .Returns(new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero));
@@ -107,7 +106,6 @@ namespace AppointmentManager.Services.Tests
         {
             var appointmentDate = new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero);
             var availableEquipment = new Equipment { Id = 1, Name = "Device 101", Status = EquipmentStatus.Available };
-            var patientId = "3523525";
 
             mockDate.Setup(x => x.Now)
                     .Returns(new DateTimeOffset(2020, 2, 1, 10, 00, 00, TimeSpan.Zero));

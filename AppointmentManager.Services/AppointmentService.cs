@@ -1,5 +1,6 @@
 ﻿using AppointmentManager.Common;
 using AppointmentManager.Common.Validation;
+using AppointmentManager.Data.Entities;
 using AppointmentManager.Data.Repositories;
 using System;
 
@@ -48,7 +49,7 @@ namespace AppointmentManager.Services
                 throw new ValidationException("Appointment date must not be later than two weeks from now");
             }
 
-            if (appointmentRepository.AppointmentExists(appointmentDate))
+            if (appointmentRepository.AppointmentExists(patientId, appointmentDate))
             {
                 throw new ValidationException("An appointment already exists for this date");
             }
@@ -99,6 +100,47 @@ namespace AppointmentManager.Services
             {
                 throw new Exception("There was an issue cancelling the appointment");
             }
+        }
+
+        public void Change(string patientId, DateTimeOffset appointmentDate, DateTimeOffset newAppointmentDate)
+        {
+            var existingAppointment = appointmentRepository.GetAppointment(patientId, appointmentDate);
+
+            if (existingAppointment == null)
+            {
+                throw new ValidationException("No appointment found");
+            }
+
+            if ((appointmentDate - dateTime.Now).Days <= 2)
+            {
+                throw new ValidationException("Cannot change appointment less than two days before original appointment date");
+            }
+
+            if ((newAppointmentDate - dateTime.Now).Days > 14)
+            {
+                throw new ValidationException("Appointment date must not be later than two weeks from now");
+            }
+
+            var availableEquipment = equipmentService.GetAvailableEquipment(newAppointmentDate);
+
+            if (availableEquipment == null)
+            {
+                throw new ValidationException("No available equipment found for new appointment date");
+            }
+
+            try
+            {
+                appointmentRepository.CancelAppointment(existingAppointment);
+                appointmentRepository.CreateAppointment(patientId, availableEquipment, newAppointmentDate);
+                equipmentService.SetEquipmentAvailable(appointmentDate);
+                equipmentService.SetEquipmentUnavailable(newAppointmentDate);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AppointmentManager.API.Models
 {
-    public class CreateAppointmentModel
+    public class AppointmentModel
     {
         [Required]
         public string PatientId { get; set; }

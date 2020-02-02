@@ -38,7 +38,7 @@ namespace AppointmentManager.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost("create")]
-        public IActionResult Post([FromBody] CreateAppointmentModel createAppointmentModel)
+        public IActionResult Post([FromBody] AppointmentModel createAppointmentModel)
         {
             if (!ModelState.IsValid)
             {
@@ -62,9 +62,23 @@ namespace AppointmentManager.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPut("change")]
-        public IActionResult Change([FromBody] string value)
+        public IActionResult Change([FromBody] AppointmentChangeModel changeAppointmentModel)
         {
-            return Ok(value);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                Ok();
+            }
+            catch (ValidationException validationException)
+            {
+                return BadRequest(validationException.Message);
+            }
+
+            return BadRequest();
         }
 
         /// <summary>
@@ -72,9 +86,22 @@ namespace AppointmentManager.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPut("cancel")]
-        public IActionResult Cancel([FromBody] string value)
+        public IActionResult Cancel([FromBody] AppointmentModel cancelAppointmentModel)
         {
-            return Ok(value);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                appointmentService.Cancel(cancelAppointmentModel.PatientId, cancelAppointmentModel.AppointmentDate);
+                return Ok();
+            }
+            catch (ValidationException validationException)
+            {
+                return BadRequest(validationException.Message);
+            }
         }
     }
 }
