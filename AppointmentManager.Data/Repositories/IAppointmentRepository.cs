@@ -36,5 +36,10 @@ namespace AppointmentManager.Data.Repositories
         /// <param name="appointmentDate"></param>
         /// <returns></returns>
         Appointment GetAppointment(string patientId, DateTimeOffset appointmentDate);
+
+        /// <summary>
+        /// Commit changes to database
+        /// </summary>
+        void CommitChanges();
     }
 }

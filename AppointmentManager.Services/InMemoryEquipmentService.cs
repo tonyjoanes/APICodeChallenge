@@ -48,8 +48,11 @@ namespace AppointmentManager.Services
 
         public void SetEquipmentAvailable(DateTimeOffset appointmentDate)
         {
-            var removeBooking = equipmentBookings.Single(x => x == appointmentDate.Date);
-            equipmentBookings.Remove(removeBooking);
+            if (equipmentBookings.Count >0)
+            {
+                var removeBooking = equipmentBookings.Single(x => x == appointmentDate.Date);
+                equipmentBookings.Remove(removeBooking);
+            }
         }
 
         public void SetEquipmentAvailable(int id)

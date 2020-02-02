@@ -44,10 +44,7 @@ namespace AppointmentManager.Services
                 throw new ValidationException("Appointment date cannot be in the past");
             }
 
-            if ((appointmentDate - dateTime.Now).Days > 14)
-            {
-                throw new ValidationException("Appointment date must not be later than two weeks from now");
-            }
+            AssertTwoWeekDateRuleOrThrow(appointmentDate, dateTime.Now);
 
             if (appointmentRepository.AppointmentExists(patientId, appointmentDate))
             {
@@ -65,6 +62,7 @@ namespace AppointmentManager.Services
             {
                 appointmentRepository.CreateAppointment(patientId, availableEquipment, appointmentDate);
                 equipmentService.SetEquipmentUnavailable(appointmentDate);
+                appointmentRepository.CommitChanges();
             }
             catch (Exception ex)
             {
@@ -79,12 +77,7 @@ namespace AppointmentManager.Services
         /// <param name="appointmentDate"></param>
         public void Cancel(string patientId, DateTimeOffset appointmentDate)
         {
-            var appointment = appointmentRepository.GetAppointment(patientId, appointmentDate);
-
-            if (appointment == null)
-            {
-                throw new ValidationException("No appointment was found to cancel");
-            }
+            var appointment = GetAppointmentOrThrow(patientId, appointmentDate);
 
             if ((appointmentDate - dateTime.Now).Days < 3)
             {
@@ -95,6 +88,7 @@ namespace AppointmentManager.Services
             {
                 appointmentRepository.CancelAppointment(appointment);
                 equipmentService.SetEquipmentAvailable(appointmentDate);
+                appointmentRepository.CommitChanges();
             }
             catch (Exception)
             {
@@ -102,25 +96,23 @@ namespace AppointmentManager.Services
             }
         }
 
+        /// <summary>
+        /// Change an Appointment
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <param name="appointmentDate"></param>
+        /// <param name="newAppointmentDate"></param>
         public void Change(string patientId, DateTimeOffset appointmentDate, DateTimeOffset newAppointmentDate)
         {
-            var existingAppointment = appointmentRepository.GetAppointment(patientId, appointmentDate);
-
-            if (existingAppointment == null)
-            {
-                throw new ValidationException("No appointment found");
-            }
+            var existingAppointment = GetAppointmentOrThrow(patientId, appointmentDate);
 
             if ((appointmentDate - dateTime.Now).Days <= 2)
             {
                 throw new ValidationException("Cannot change appointment less than two days before original appointment date");
             }
 
-            if ((newAppointmentDate - dateTime.Now).Days > 14)
-            {
-                throw new ValidationException("Appointment date must not be later than two weeks from now");
-            }
-
+            AssertTwoWeekDateRuleOrThrow(newAppointmentDate, dateTime.Now);
+            
             var availableEquipment = equipmentService.GetAvailableEquipment(newAppointmentDate);
 
             if (availableEquipment == null)
@@ -135,12 +127,41 @@ namespace AppointmentManager.Services
                 equipmentService.SetEquipmentAvailable(appointmentDate);
                 equipmentService.SetEquipmentUnavailable(newAppointmentDate);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                throw new Exception($"There was an error changing an appointment date: {ex.Message}");
+            }    
+        }
 
-                throw;
+        /// <summary>
+        /// Check for existing Appointment
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <param name="appointmentDate"></param>
+        /// <returns></returns>
+        private Appointment GetAppointmentOrThrow(string patientId, DateTimeOffset appointmentDate)
+        {
+            var appointment = appointmentRepository.GetAppointment(patientId, appointmentDate);
+
+            if (appointment == null)
+            {
+                throw new ValidationException("No appointment found");
             }
-            
+
+            return appointment;
+        }
+
+        /// <summary>
+        /// Check dates are not two weeks apart and throw
+        /// </summary>
+        /// <param name="dateOne"></param>
+        /// <param name="dateTwo"></param>
+        private void AssertTwoWeekDateRuleOrThrow(DateTimeOffset dateOne, DateTimeOffset dateTwo)
+        {
+            if ((dateOne - dateTwo).Days > 14)
+            {
+                throw new ValidationException("Appointment date must not be later than two weeks from now");
+            }
         }
     }
 }

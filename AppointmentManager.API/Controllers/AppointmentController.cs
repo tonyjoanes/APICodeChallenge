@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AppointmentManager.API.Models;
 using AppointmentManager.Common.Validation;
+using AppointmentManager.Data.Entities;
 using AppointmentManager.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace AppointmentManager.API.Controllers
 {
@@ -17,20 +16,22 @@ namespace AppointmentManager.API.Controllers
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService appointmentService;
+        private readonly UserManager<User> userManager;
 
         /// <summary>
         /// Initialise a new instance of the AppointmentController
         /// </summary>
-        public AppointmentController(IAppointmentService appointmentService)
+        public AppointmentController(IAppointmentService appointmentService, UserManager<User> userManager)
         {
             this.appointmentService = appointmentService;
+            this.userManager = userManager;
         }
 
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace AppointmentManager.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost("create")]
-        public IActionResult Post([FromBody] AppointmentModel createAppointmentModel)
+        public async Task<IActionResult> Post([FromBody] AppointmentModel createAppointmentModel)
         {
             if (!ModelState.IsValid)
             {
@@ -47,6 +48,7 @@ namespace AppointmentManager.API.Controllers
 
             try
             {
+                var user = await userManager.GetUserAsync(HttpContext.User);
                 appointmentService.Create(createAppointmentModel.PatientId, createAppointmentModel.AppointmentDate);
             }
             catch (ValidationException validationException)
@@ -71,14 +73,16 @@ namespace AppointmentManager.API.Controllers
 
             try
             {
-                Ok();
+                appointmentService.Change(changeAppointmentModel.PatientId,
+                                          changeAppointmentModel.CurrentAppointmentDate,
+                                          changeAppointmentModel.NewAppointmentDate);
+
+                return Ok();
             }
             catch (ValidationException validationException)
             {
                 return BadRequest(validationException.Message);
             }
-
-            return BadRequest();
         }
 
         /// <summary>

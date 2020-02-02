@@ -80,6 +80,13 @@ namespace AppointmentManager.Data.Repositories
         public void CancelAppointment(Appointment appointment)
         {
             appointment.IsDeleted = true;
+
+            dbContext.Appointments.Update(appointment);
+        }
+
+        void IAppointmentRepository.CommitChanges()
+        {
+            dbContext.SaveChanges();
         }
     }
 }
