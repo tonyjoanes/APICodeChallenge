@@ -17,6 +17,11 @@ namespace AppointmentManager.Data
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
 
+        /// <summary>
+        /// Initialise an instance of the IdentityInitialiser
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="roleManager"></param>
         public IdentityInitializer(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;

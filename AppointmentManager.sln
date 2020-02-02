@@ -9,11 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppointmentManager.Data", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{622D35F8-8C6C-43AF-89FA-24AFE651BE17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentManager.Common", "AppointmentManager.Common\AppointmentManager.Common.csproj", "{85C913A0-B5FF-4BB1-A387-E697C0F89598}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppointmentManager.Common", "AppointmentManager.Common\AppointmentManager.Common.csproj", "{85C913A0-B5FF-4BB1-A387-E697C0F89598}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentManager.Services", "AppointmentManager.Services\AppointmentManager.Services.csproj", "{0545588A-C845-44B4-8131-4E3279AA3528}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppointmentManager.Services", "AppointmentManager.Services\AppointmentManager.Services.csproj", "{0545588A-C845-44B4-8131-4E3279AA3528}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentManager.Services.Tests", "AppointmentManager.Services.Tests\AppointmentManager.Services.Tests.csproj", "{3B7F1EB9-6359-4FCC-88BE-396F9DD11EBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppointmentManager.Services.Tests", "AppointmentManager.Services.Tests\AppointmentManager.Services.Tests.csproj", "{3B7F1EB9-6359-4FCC-88BE-396F9DD11EBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentManager.Internal.API", "AppointmentManager.Internal.API\AppointmentManager.Internal.API.csproj", "{F26B6369-64BD-4137-BFA0-7211C125306E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{15356F86-940A-4BE8-824E-9D057ABF5505}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +45,18 @@ Global
 		{3B7F1EB9-6359-4FCC-88BE-396F9DD11EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B7F1EB9-6359-4FCC-88BE-396F9DD11EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B7F1EB9-6359-4FCC-88BE-396F9DD11EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F26B6369-64BD-4137-BFA0-7211C125306E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F26B6369-64BD-4137-BFA0-7211C125306E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F26B6369-64BD-4137-BFA0-7211C125306E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F26B6369-64BD-4137-BFA0-7211C125306E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{48D2C2EC-C36A-4CAD-8385-74E9A7D00FA4} = {15356F86-940A-4BE8-824E-9D057ABF5505}
 		{3B7F1EB9-6359-4FCC-88BE-396F9DD11EBA} = {622D35F8-8C6C-43AF-89FA-24AFE651BE17}
+		{F26B6369-64BD-4137-BFA0-7211C125306E} = {15356F86-940A-4BE8-824E-9D057ABF5505}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7323222E-46D1-4211-8A17-0FC607E7659E}

@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 
 namespace AppointmentManager.API.Controllers
 {
+    /// <summary>
+    /// Athorisation Controller
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -15,6 +18,11 @@ namespace AppointmentManager.API.Controllers
         private readonly SignInManager<User> signInManager;
         private readonly ILogger<AuthController> logger;
 
+        /// <summary>
+        /// Initialise an instance of the AuthController
+        /// </summary>
+        /// <param name="signInManager"></param>
+        /// <param name="logger"></param>
         public AuthController(SignInManager<User> signInManager, ILogger<AuthController> logger)
         {
             this.signInManager = signInManager;
@@ -26,6 +34,11 @@ namespace AppointmentManager.API.Controllers
             return 69;
         }
 
+        /// <summary>
+        /// Login with credentials
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] CredentialModel model)
         {

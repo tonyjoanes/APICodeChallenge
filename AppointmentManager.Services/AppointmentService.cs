@@ -3,6 +3,7 @@ using AppointmentManager.Common.Validation;
 using AppointmentManager.Data.Entities;
 using AppointmentManager.Data.Repositories;
 using System;
+using System.Collections.Generic;
 
 namespace AppointmentManager.Services
 {
@@ -126,11 +127,17 @@ namespace AppointmentManager.Services
                 appointmentRepository.CreateAppointment(patientId, availableEquipment, newAppointmentDate);
                 equipmentService.SetEquipmentAvailable(appointmentDate);
                 equipmentService.SetEquipmentUnavailable(newAppointmentDate);
+                appointmentRepository.CommitChanges();
             }
             catch (Exception ex)
             {
                 throw new Exception($"There was an error changing an appointment date: {ex.Message}");
             }    
+        }
+
+        public IEnumerable<Appointment> GetByDate(DateTime date)
+        {
+            return appointmentRepository.GetAppointmentsByDate(date);
         }
 
         /// <summary>

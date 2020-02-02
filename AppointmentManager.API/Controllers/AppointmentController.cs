@@ -16,14 +16,18 @@ namespace AppointmentManager.API.Controllers
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService appointmentService;
+        private readonly INotificationService notificationService;
         private readonly UserManager<User> userManager;
 
         /// <summary>
         /// Initialise a new instance of the AppointmentController
         /// </summary>
-        public AppointmentController(IAppointmentService appointmentService, UserManager<User> userManager)
+        public AppointmentController(IAppointmentService appointmentService, 
+                                     INotificationService notificationService,
+                                     UserManager<User> userManager)
         {
             this.appointmentService = appointmentService;
+            this.notificationService = notificationService;
             this.userManager = userManager;
         }
 
@@ -48,8 +52,17 @@ namespace AppointmentManager.API.Controllers
 
             try
             {
+                // we could use the PatientID from the logged in user really, it would be them creating an
+                // appointment for themselves.
                 var user = await userManager.GetUserAsync(HttpContext.User);
                 appointmentService.Create(createAppointmentModel.PatientId, createAppointmentModel.AppointmentDate);
+
+                // In real life I would just send this message to a queue and allow a distributed
+                // service pick up the message and send off the email so that this can return
+                // immediately
+                notificationService.SendConfirmationEmail(createAppointmentModel.PatientId, 
+                                                          user.Email, 
+                                                          createAppointmentModel.AppointmentDate);
             }
             catch (ValidationException validationException)
             {

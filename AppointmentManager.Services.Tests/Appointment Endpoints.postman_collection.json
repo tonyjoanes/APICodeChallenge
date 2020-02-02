@@ -37,7 +37,38 @@
 			"response": []
 		},
 		{
-			"name": "Create Appointment",
+			"name": "CANCEL APPOINTMENT",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"patientId\": \"12414\",\n\t\"appointmentdate\": \"2020-02-11T00:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "https://localhost:44394/api/appointment/cancel",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44394",
+					"path": [
+						"api",
+						"appointment",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE APPOINTMENT",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -47,6 +78,10 @@
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"patientId\": \"12414\",\n\t\"appointmentdate\": \"2020-02-11T00:00:00Z\"\n}"
+				},
 				"url": {
 					"raw": "https://localhost:44394/api/appointment/create",
 					"protocol": "https",
@@ -58,6 +93,37 @@
 						"api",
 						"appointment",
 						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CHANGE APPOINTMENT",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"patientId\": \"12414\",\n\t\"currentappointmentdate\": \"2020-02-11T00:00:00Z\",\n\t\"newappointmentdate\": \"2020-02-11T00:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "https://localhost:44394/api/appointment/cancel",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44394",
+					"path": [
+						"api",
+						"appointment",
+						"cancel"
 					]
 				}
 			},

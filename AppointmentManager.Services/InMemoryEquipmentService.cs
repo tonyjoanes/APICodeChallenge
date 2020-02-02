@@ -46,6 +46,10 @@ namespace AppointmentManager.Services
                 : null;
         }
 
+        /// <summary>
+        /// Sets the Equipment to Available by removing booked out dates
+        /// </summary>
+        /// <param name="appointmentDate"></param>
         public void SetEquipmentAvailable(DateTimeOffset appointmentDate)
         {
             if (equipmentBookings.Count >0)
@@ -55,11 +59,10 @@ namespace AppointmentManager.Services
             }
         }
 
-        public void SetEquipmentAvailable(int id)
-        {
-            equipment.Status = EquipmentStatus.Available;
-        }
-
+        /// <summary>
+        /// Sets Equipment to Unavailble by booking out the date
+        /// </summary>
+        /// <param name="appointmentDate"></param>
         public void SetEquipmentUnavailable(DateTimeOffset appointmentDate)
         {
             equipmentBookings.Add(appointmentDate.Date);

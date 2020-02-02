@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace AppointmentManager.API.Extentsions
 {
+    /// <summary>
+    /// Extension methods for the ServiceCollections
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>

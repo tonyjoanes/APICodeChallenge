@@ -1,4 +1,7 @@
-using AppointmentManager.API.Extentsions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AppointmentManager.Common;
 using AppointmentManager.Data;
 using AppointmentManager.Data.Entities;
@@ -6,13 +9,15 @@ using AppointmentManager.Data.Repositories;
 using AppointmentManager.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace AppointmentManager.API
+namespace AppointmentManager.Internal.API
 {
     public class Startup
     {
@@ -26,11 +31,6 @@ namespace AppointmentManager.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
-
             services.AddScoped<IDateTime, DateTimeWrapper>();
             services.AddDbContext<AppDbContext>(ServiceLifetime.Scoped);
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
@@ -41,13 +41,11 @@ namespace AppointmentManager.API
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
             services.AddTransient<INotificationService, NotificationService>();
-
-            services.ConfigureApplicationCooke();
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityInitializer identitySeeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -58,15 +56,12 @@ namespace AppointmentManager.API
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-            identitySeeder.Seed().Wait();
         }
     }
 }

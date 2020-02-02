@@ -1,6 +1,7 @@
 ﻿using AppointmentManager.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AppointmentManager.Data.Repositories
@@ -82,6 +83,18 @@ namespace AppointmentManager.Data.Repositories
             appointment.IsDeleted = true;
 
             dbContext.Appointments.Update(appointment);
+        }
+
+        /// <summary>
+        /// Get a list of Appointments by date
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public IEnumerable<Appointment> GetAppointmentsByDate(DateTime date)
+        {
+            return dbContext
+                .Appointments
+                .Where(x => x.Date.Date == date.Date);
         }
 
         void IAppointmentRepository.CommitChanges()

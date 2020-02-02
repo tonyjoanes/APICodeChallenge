@@ -1,5 +1,7 @@
 ﻿using AppointmentManager.Data.Entities;
 using System;
+using System.Collections.Generic;
+
 namespace AppointmentManager.Data.Repositories
 {
     /// <summary>
@@ -36,6 +38,13 @@ namespace AppointmentManager.Data.Repositories
         /// <param name="appointmentDate"></param>
         /// <returns></returns>
         Appointment GetAppointment(string patientId, DateTimeOffset appointmentDate);
+
+        /// <summary>
+        /// Get a list of Appointments by date
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        IEnumerable<Appointment> GetAppointmentsByDate(DateTime date);
 
         /// <summary>
         /// Commit changes to database
