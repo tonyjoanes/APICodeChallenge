@@ -29,3 +29,15 @@ Import these all into Postman. They can be found in the `AppointmentManager.Serv
 
 - Appointment Endpoints.postman_collection.json
 - Development.postman_environment.json
+
+## Default User
+The Identity database is seeded with a default user in the system.
+
+You can login with this user. Details are in the Postman collection
+
+```json
+{
+	"username": "testpatient",
+	"password": "P@ssw0rd!"
+}
+```
